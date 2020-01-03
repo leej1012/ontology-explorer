@@ -320,10 +320,14 @@ public class OntologySDKService {
         StorageNodeInfoDetail detail = new StorageNodeInfoDetail();
 
         ByteArrayInputStream bais = new ByteArrayInputStream(Helper.hexToBytes(result));
-        BinaryReader br = new BinaryReader(bais);
+        BinaryReader reader = new BinaryReader(bais);
 
-        byte[] booleanBytes = br.readBytes(1);
-        BigInteger booleanResult = Helper.BigIntFromNeoBytes(booleanBytes);
+        boolean resultBoolean = reader.readBoolean();
+
+        byte[] noedeInfoBytes = reader.readVarBytes();
+
+        ByteArrayInputStream data = new ByteArrayInputStream(noedeInfoBytes);
+        BinaryReader br = new BinaryReader(data);
 
         byte[] totalBytes = br.readBytes(1);
         BigInteger total = Helper.BigIntFromNeoBytes(totalBytes);
