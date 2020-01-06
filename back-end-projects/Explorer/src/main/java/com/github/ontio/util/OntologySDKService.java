@@ -329,9 +329,6 @@ public class OntologySDKService {
         ByteArrayInputStream data = new ByteArrayInputStream(noedeInfoBytes);
         BinaryReader br = new BinaryReader(data);
 
-        byte[] totalBytes = br.readBytes(1);
-        BigInteger total = Helper.BigIntFromNeoBytes(totalBytes);
-
         byte[] pledgeBytes = br.readVarBytes();
         BigInteger pledge = Helper.BigIntFromNeoBytes(pledgeBytes);
         detail.setPledge(pledge);
