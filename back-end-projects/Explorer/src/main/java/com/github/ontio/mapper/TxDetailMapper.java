@@ -2,6 +2,7 @@ package com.github.ontio.mapper;
 
 import com.github.ontio.model.dto.TransferTxDto;
 import com.github.ontio.model.dto.TxDetailDto;
+import com.github.ontio.model.dto.TxEventLogDto;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
@@ -67,5 +68,9 @@ public interface TxDetailMapper extends Mapper<TxDetailDto> {
     List<TransferTxDto> selectTransferTxsOfHashes(@Param("address") String address, @Param("hashes") List<String> contractHashes,
             @Param("assetNames") List<String> assetNames, @Param("tokenType") String tokenType,
             @Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    List<TxEventLogDto> selectTxsByContractHash(@Param("contractHash") String contractHash, @Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+
+    Integer selectCountByContracthash(@Param("contractHash") String contractHash);
 
 }

@@ -21,24 +21,12 @@ package com.github.ontio.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.ontio.config.ParamsConfig;
-import com.github.ontio.mapper.ContractDailyAggregationMapper;
-import com.github.ontio.mapper.ContractDailySummaryMapper;
-import com.github.ontio.mapper.ContractMapper;
-import com.github.ontio.mapper.NodeInfoOffChainMapper;
-import com.github.ontio.mapper.NodeInfoOnChainMapper;
-import com.github.ontio.mapper.Oep4TxDetailMapper;
-import com.github.ontio.mapper.Oep5TxDetailMapper;
-import com.github.ontio.mapper.Oep8TxDetailMapper;
-import com.github.ontio.mapper.TxEventLogMapper;
+import com.github.ontio.mapper.*;
 import com.github.ontio.model.common.PageResponseBean;
 import com.github.ontio.model.common.ResponseBean;
 import com.github.ontio.model.dao.NodeInfoOffChain;
 import com.github.ontio.model.dao.NodeInfoOnChain;
-import com.github.ontio.model.dto.ContractDto;
-import com.github.ontio.model.dto.NodeInfoOffChainDto;
-import com.github.ontio.model.dto.Oep5TxDetailDto;
-import com.github.ontio.model.dto.TxDetailDto;
-import com.github.ontio.model.dto.TxEventLogDto;
+import com.github.ontio.model.dto.*;
 import com.github.ontio.model.dto.aggregation.ContractAggregationDto;
 import com.github.ontio.service.IContractService;
 import com.github.ontio.util.ConstantParam;
@@ -72,6 +60,7 @@ public class ContractServiceImpl implements IContractService {
     private final Oep5TxDetailMapper oep5TxDetailMapper;
     private final Oep8TxDetailMapper oep8TxDetailMapper;
     private final TxEventLogMapper txEventLogMapper;
+    private final TxDetailMapper txDetailMapper;
     private final ParamsConfig paramsConfig;
     private final NodeInfoOffChainMapper nodeInfoOffChainMapper;
     private final NodeInfoOnChainMapper nodeInfoOnChainMapper;
@@ -79,16 +68,17 @@ public class ContractServiceImpl implements IContractService {
 
     @Autowired
     public ContractServiceImpl(ContractMapper contractMapper, Oep4TxDetailMapper oep4TxDetailMapper,
-            Oep5TxDetailMapper oep5TxDetailMapper, Oep8TxDetailMapper oep8TxDetailMapper, TxEventLogMapper txEventLogMapper,
-            ParamsConfig paramsConfig, NodeInfoOffChainMapper nodeInfoOffChainMapper,
-            ContractDailySummaryMapper contractDailySummaryMapper, NodeInfoOnChainMapper nodeInfoOnChainMapper,
-            ContractDailyAggregationMapper contractDailyAggregationMapper) {
+                               Oep5TxDetailMapper oep5TxDetailMapper, Oep8TxDetailMapper oep8TxDetailMapper, TxEventLogMapper txEventLogMapper,
+                               TxDetailMapper txDetailMapper, ParamsConfig paramsConfig, NodeInfoOffChainMapper nodeInfoOffChainMapper,
+                               ContractDailySummaryMapper contractDailySummaryMapper, NodeInfoOnChainMapper nodeInfoOnChainMapper,
+                               ContractDailyAggregationMapper contractDailyAggregationMapper) {
         this.contractMapper = contractMapper;
         this.oep4TxDetailMapper = oep4TxDetailMapper;
         this.oep5TxDetailMapper = oep5TxDetailMapper;
         this.oep8TxDetailMapper = oep8TxDetailMapper;
         this.paramsConfig = paramsConfig;
         this.txEventLogMapper = txEventLogMapper;
+        this.txDetailMapper = txDetailMapper;
         this.nodeInfoOffChainMapper = nodeInfoOffChainMapper;
         this.contractDailySummaryMapper = contractDailySummaryMapper;
         this.nodeInfoOnChainMapper = nodeInfoOnChainMapper;
@@ -160,8 +150,8 @@ public class ContractServiceImpl implements IContractService {
                 pageResponseBean = new PageResponseBean(txDetailDtos, count);
                 break;
             case ConstantParam.CONTRACT_TYPE_OTHER:
-                List<TxEventLogDto> txEventLogDtos = txEventLogMapper.selectTxsByCalledContractHash(contractHash, start, pageSize);
-                count = txEventLogMapper.selectCountByCalledContracthash(contractHash);
+                List<TxEventLogDto> txEventLogDtos = txDetailMapper.selectTxsByContractHash(contractHash, start, pageSize);
+                count = txDetailMapper.selectCountByContracthash(contractHash);
                 pageResponseBean = new PageResponseBean(txEventLogDtos, count);
                 break;
         }
@@ -208,8 +198,8 @@ public class ContractServiceImpl implements IContractService {
                 pageResponseBean = new PageResponseBean(txDetailDtos, count);
                 break;
             case ConstantParam.CONTRACT_TYPE_OTHER:
-                List<TxEventLogDto> txEventLogDtos = txEventLogMapper.selectTxsByCalledContractHash(contractHash, start, pageSize);
-                count = txEventLogMapper.selectCountByCalledContracthash(contractHash);
+                List<TxEventLogDto> txEventLogDtos = txDetailMapper.selectTxsByContractHash(contractHash, start, pageSize);
+                count = txDetailMapper.selectCountByContracthash(contractHash);
                 pageResponseBean = new PageResponseBean(txEventLogDtos, count);
                 break;
         }
