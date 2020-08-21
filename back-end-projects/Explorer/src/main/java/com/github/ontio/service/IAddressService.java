@@ -11,7 +11,7 @@ public interface IAddressService {
 
     ResponseBean queryAddressBalanceByAssetName(String address, String assetName);
 
-    ResponseBean queryAddressBalanceByContractHash(String address, String contractHash);
+    ResponseBean queryAddressBalanceByContractHash(String address, String contractHash, Integer isId);
 
     ResponseBean queryAddressBalanceByAssetName4Onto(String address, String assetName);
 

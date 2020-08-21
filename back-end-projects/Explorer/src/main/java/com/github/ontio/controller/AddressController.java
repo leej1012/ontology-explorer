@@ -50,8 +50,8 @@ public class AddressController {
     @GetMapping(value = "/{address}/{token_type}/balances")
     public ResponseBean queryAddressBalance(@PathVariable("address") @Length(min = 34, max = 34, message = "Incorrect address " +
             "format") String address,
-            @PathVariable("token_type") @Pattern(regexp = "oep4|OEP4|oep5|OEP5|oep8|OEP8|native|NATIVE|ALL|all|native-oep4|NATIVE-OEP4", message =
-                    "Incorrect token type") String tokenType) {
+                                            @PathVariable("token_type") @Pattern(regexp = "oep4|OEP4|oep5|OEP5|oep8|OEP8|native|NATIVE|ALL|all|native-oep4|NATIVE-OEP4", message =
+                                                    "Incorrect token type") String tokenType) {
 
         log.info("####{}.{} begin...address:{},token_type:{}", CLASS_NAME, Helper.currentMethod(), address, tokenType);
 
@@ -63,12 +63,12 @@ public class AddressController {
     @RequestLimit(count = 120)
     @ApiOperation(value = "Get address balance by assetName")
     @GetMapping(value = "/{address}/balances")
-    public ResponseBean queryAddressBalanceByAssetName(@PathVariable("address") @Length(min = 34, max = 34, message = "Incorrect " +
-            "address format") String address,
-            @RequestParam(value = "asset_name", required = false) String assetName,
-            @RequestParam(value = "contract_hash", required = false) @Length(min = 40, max = 40, message = "Incorrect contract " +
-                    "hash") String contractHash,
-            @RequestParam(value = "channel", required = false) String channel) {
+    public ResponseBean queryAddressBalanceByAssetName(@PathVariable("address") String address,
+                                                       @RequestParam(value = "asset_name", required = false) String assetName,
+                                                       @RequestParam(value = "contract_hash", required = false) @Length(min = 40, max = 40, message = "Incorrect contract " +
+                                                               "hash") String contractHash,
+                                                       @RequestParam(value = "channel", required = false) String channel,
+                                                       @RequestParam(value = "isId", required = false) Integer isId) {
 
         log.info("####{}.{} begin...address:{},assetName:{}", CLASS_NAME, Helper.currentMethod(), address, assetName);
 
@@ -79,7 +79,7 @@ public class AddressController {
         } else if (Helper.isNotEmptyAndNull(assetName)) {
             rs = addressService.queryAddressBalanceByAssetName(address, assetName);
         } else if (Helper.isNotEmptyAndNull(contractHash)) {
-            rs = addressService.queryAddressBalanceByContractHash(address, contractHash);
+            rs = addressService.queryAddressBalanceByContractHash(address, contractHash, isId);
         }
         return rs;
     }
@@ -91,10 +91,10 @@ public class AddressController {
     @GetMapping(value = "/{address}/transactions")
     public ResponseBean queryAddressTransferTxsByPage(@PathVariable("address") @Length(min = 34, max = 34, message = "Incorrect " +
             "address format") String address,
-            @RequestParam(name = "page_size", required = false) @Min(1) @Max(20) Integer pageSize,
-            @RequestParam(name = "page_number", required = false) @Min(1) Integer pageNumber,
-            @RequestParam(name = "begin_time", required = false) Long beginTime,
-            @RequestParam(name = "end_time", required = false) Long endTime) {
+                                                      @RequestParam(name = "page_size", required = false) @Min(1) @Max(20) Integer pageSize,
+                                                      @RequestParam(name = "page_number", required = false) @Min(1) Integer pageNumber,
+                                                      @RequestParam(name = "begin_time", required = false) Long beginTime,
+                                                      @RequestParam(name = "end_time", required = false) Long endTime) {
 
         log.info("####{}.{} begin...address:{}", CLASS_NAME, Helper.currentMethod(), address);
 
@@ -118,13 +118,13 @@ public class AddressController {
     @GetMapping(value = "/{address}/{asset_name}/transactions")
     public ResponseBean queryAddressTransferTxsByPageAndAssetName(@PathVariable("address") @Length(min = 34, max = 34, message =
             "error address format") String address,
-            @PathVariable("asset_name") String assetName,
-            @RequestParam(name = "page_size", required = false) @Min(1) @Max(20) Integer pageSize,
-            @RequestParam(name = "page_number", required = false) @Min(1) Integer pageNumber,
-            @RequestParam(name = "begin_time", required = false) Long beginTime,
-            @RequestParam(name = "end_time", required = false) Long endTime,
-            @RequestParam(name = "channel", required = false) String channel,
-            @RequestParam(name = "address_type", required = false) @Pattern(regexp = "fromAddress|toAddress") String addressType) {
+                                                                  @PathVariable("asset_name") String assetName,
+                                                                  @RequestParam(name = "page_size", required = false) @Min(1) @Max(20) Integer pageSize,
+                                                                  @RequestParam(name = "page_number", required = false) @Min(1) Integer pageNumber,
+                                                                  @RequestParam(name = "begin_time", required = false) Long beginTime,
+                                                                  @RequestParam(name = "end_time", required = false) Long endTime,
+                                                                  @RequestParam(name = "channel", required = false) String channel,
+                                                                  @RequestParam(name = "address_type", required = false) @Pattern(regexp = "fromAddress|toAddress") String addressType) {
 
         log.info("###{}.{} begin...address:{}", CLASS_NAME, Helper.currentMethod(), address);
 

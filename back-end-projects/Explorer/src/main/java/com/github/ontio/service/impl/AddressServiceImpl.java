@@ -26,11 +26,7 @@ import com.github.ontio.model.dto.aggregation.AddressBalanceAggregationsDto;
 import com.github.ontio.model.dto.aggregation.ExtremeBalanceDto;
 import com.github.ontio.model.dto.ranking.AddressRankingDto;
 import com.github.ontio.service.IAddressService;
-import com.github.ontio.util.ConstantParam;
-import com.github.ontio.util.ErrorInfo;
-import com.github.ontio.util.Helper;
-import com.github.ontio.util.JacksonUtil;
-import com.github.ontio.util.OntologySDKService;
+import com.github.ontio.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -307,9 +303,14 @@ public class AddressServiceImpl implements IAddressService {
 
 
     @Override
-    public ResponseBean queryAddressBalanceByContractHash(String address, String contractHash) {
+    public ResponseBean queryAddressBalanceByContractHash(String address, String contractHash, Integer isId) {
         List<BalanceDto> balanceList = new ArrayList<>();
 
+        if (isId == 1) {
+            String resp = HttpClientUtil.getRequest("http://openkg-prod.ontfs.io/getAddressByUserId/" + address, new HashMap<>(), new HashMap<>());
+            JSONObject jsonObject = JSONObject.parseObject(resp);
+            address = jsonObject.getString("address");
+        }
         if (ConstantParam.CONTRACTHASH_ONT.equals(contractHash)) {
 
             initSDK();
