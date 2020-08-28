@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
+import com.github.ontio.common.Address;
 import com.github.ontio.config.ParamsConfig;
 import com.github.ontio.mapper.AddressDailyAggregationMapper;
 import com.github.ontio.mapper.Oep4Mapper;
@@ -307,9 +308,11 @@ public class AddressServiceImpl implements IAddressService {
         List<BalanceDto> balanceList = new ArrayList<>();
 
         if (isId == 1) {
-            String resp = HttpClientUtil.getRequest("http://openkg-prod.ontfs.io/getAddressByUserId/" + address, new HashMap<>(), new HashMap<>());
+            Map<String, Object> params = new HashMap<>();
+            params.put("user_id", address);
+            String resp = HttpClientUtil.getRequest("http://openkg-prod.ontfs.io/getAddressByUserId", params, new HashMap<>());
             JSONObject jsonObject = JSONObject.parseObject(resp);
-            address = jsonObject.getString("address");
+            address = Address.parse(jsonObject.getString("address")).toBase58();
         }
         if (ConstantParam.CONTRACTHASH_ONT.equals(contractHash)) {
 
